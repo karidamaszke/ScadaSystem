@@ -1,0 +1,143 @@
+﻿<Window x:Class="ScadaProject.DeviceListHelp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScadaProject"
+        mc:Ignorable="d"
+        Title="DeviceListHelp" Height="610" Width="1060">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.1*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Image Height="350" HorizontalAlignment="Center" VerticalAlignment="Center" Source="Resources\schema.PNG" Stretch="Fill" Canvas.Top="72" Width="697" Margin="5,5,5,100" />
+            <Canvas HorizontalAlignment="Left" Height="25" Margin="10,417,0,0" VerticalAlignment="Top" Width="678">
+                <Label Content="1" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="33" Height="25"/>
+                <Label Content="2" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="593"  Height="25"/>
+                <Label Content="3" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="162"  Height="25"/>
+                <Label Content="4" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="441"  Height="25"/>
+                <Label Content="5" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="118"  Height="25"/>
+                <Label Content="6" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="533"  Height="25"/>
+                <Label Content="7" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="362"  Height="25"/>
+                <Label Content="8" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="456"  Height="25"/>
+                <Label Content="9" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="563"  Height="25"/>
+                <Label Content="10" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="332"  Height="25"/>
+                <Label Content="11" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="238"  Height="25"/>
+                <Label Content="12" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="54"  Height="25"/>
+                <Label Content="13" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="88"  Height="25"/>
+                <Label Content="14" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="420"  Height="25"/>
+                <Label Content="15" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="513"  Height="25"/>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" Height="25" Margin="10,442,0,0" VerticalAlignment="Top" Width="678">
+                <Label Content="16" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="560" Height="25"/>
+                <Label Content="17" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="332"  Height="25"/>
+            </Canvas>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <!-- ========================= -->
+
+            <Grid Grid.Row="0">
+                <TextBlock FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">WEJŚCIA ANALOGOWE</TextBlock>
+            </Grid>
+            <Grid Grid.Row="1" VerticalAlignment="Center">
+                <TextBlock>1. Czujnik temp. zewnętrznej</TextBlock>
+            </Grid>
+            <Grid Grid.Row="2" VerticalAlignment="Center">
+                <TextBlock>2. Czujnik temp. powietrza nawiewanego</TextBlock>
+            </Grid>
+            <Grid Grid.Row="3" VerticalAlignment="Center">
+                <TextBlock>3. Czujnik temp. powietrza za odzyskiem na wywiewie</TextBlock>
+            </Grid>
+
+            <!-- ========================= -->
+
+            <Grid Grid.Row="4">
+                <TextBlock FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">WEJŚCIA CYFROWE</TextBlock>
+            </Grid>
+            <Grid Grid.Row="5" VerticalAlignment="Center">
+                <TextBlock>4. Termostat przeciwzamrożeniowy nagrzewnicy</TextBlock>
+            </Grid>
+            <Grid Grid.Row="6" VerticalAlignment="Center">
+                <TextBlock>5. Presostat filtra podstawowego nawiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="7" VerticalAlignment="Center">
+                <TextBlock>6. Presostat filtra podstawowego wywiewu</TextBlock>
+            </Grid>
+
+            <!-- ========================= -->
+
+            <Grid Grid.Row="8">
+                <TextBlock FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">WYJŚCIA ANALOGOWE</TextBlock>
+            </Grid>
+            <Grid Grid.Row="9" VerticalAlignment="Center">
+                <TextBlock>7. Siłownik zaworu nagrzewnicy wstępnej</TextBlock>
+            </Grid>
+            <Grid Grid.Row="10" VerticalAlignment="Center">
+                <TextBlock>8. Siłownik zaworu nagrzewnicy wtórnej</TextBlock>
+            </Grid>
+            <Grid Grid.Row="11" VerticalAlignment="Center">
+                <TextBlock>9. Prędkość obrotowa wentylatora nawiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="12" VerticalAlignment="Center">
+                <TextBlock>10. Prędkość obrotowa wentylatora wywiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="13" VerticalAlignment="Center">
+                <TextBlock>11. Siłownik przepustnicy obejściowej wymiennika krzyżowego</TextBlock>
+            </Grid>
+
+            <!-- ========================= -->
+
+            <Grid Grid.Row="14">
+                <TextBlock FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">WYJŚCIA CYFROWE</TextBlock>
+            </Grid>
+            <Grid Grid.Row="15" VerticalAlignment="Center">
+                <TextBlock>12. Siłownik przepustnicy na wlocie nawiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="16" VerticalAlignment="Center">
+                <TextBlock>13. Siłownik przepustnicy na wylocie wywiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="17" VerticalAlignment="Center">
+                <TextBlock>14. Pompa nagrzewnicy wstępnej</TextBlock>
+            </Grid>
+            <Grid Grid.Row="18" VerticalAlignment="Center">
+                <TextBlock>15. Pompa nagrzewnicy wtórnej</TextBlock>
+            </Grid>
+            <Grid Grid.Row="19" VerticalAlignment="Center">
+                <TextBlock>16. Wentylator nawiewu</TextBlock>
+            </Grid>
+            <Grid Grid.Row="20" VerticalAlignment="Center">
+                <TextBlock>17. Wentylator wywiewu</TextBlock>
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Window>

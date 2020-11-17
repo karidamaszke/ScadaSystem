@@ -1,0 +1,49 @@
+﻿<Window x:Class="ScadaProject.WriteValueWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScadaProject"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Write Value" Height="240" Width="400">
+    <Grid>
+
+        <TextBlock TextAlignment="Center" Margin="116,10,116,99" TextWrapping="Wrap" Text="DEVICE:" FontWeight="Bold"  VerticalAlignment="Top" Height="20"/>
+
+        <ComboBox Name="deviceComboBox" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="372" Height="25">
+            <ComboBoxItem IsSelected="True">Siłownik zaworu nagrzewnicy wstępnej</ComboBoxItem>
+            <ComboBoxItem>Siłownik zaworu nagrzewnicy wtórnej</ComboBoxItem>
+            <ComboBoxItem>Prędkość obrotowa wentylatora nawiewu</ComboBoxItem>
+            <ComboBoxItem>Prędkość obrotowa wentylatora wywiewu</ComboBoxItem>
+            <ComboBoxItem>Siłownik przepustnicy obejściowej wymiennika krzyżowego</ComboBoxItem>
+            <ComboBoxItem>Siłownik przepustnicy na wlocie nawiewu</ComboBoxItem>
+            <ComboBoxItem>Siłownik przepustnicy na wylocie wywiewu</ComboBoxItem>
+            <ComboBoxItem>Pompa nagrzewnicy wstępnej</ComboBoxItem>
+            <ComboBoxItem>Pompa nagrzewnicy wtórnej</ComboBoxItem>
+            <ComboBoxItem>Wentylator nawiewu</ComboBoxItem>
+            <ComboBoxItem>Wentylator wywiewu</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock TextAlignment="Center" Margin="116,79,116,0" TextWrapping="Wrap" Text="VALUE:" FontWeight="Bold"  VerticalAlignment="Top" Height="20"/>
+        <TextBox Name="valueToWrite" TextAlignment="Center" HorizontalAlignment="Left" Height="25" Margin="10,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"/>
+
+        <Button Content="WRITE" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="40,156,160,0" VerticalAlignment="Top" Width="80" Click="Write" Height="30">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Content="CANCEL" FontWeight="Bold" Background="LightGoldenrodYellow" HorizontalAlignment="Center" Margin="160,156,40,0" VerticalAlignment="Top" Width="80" Click="Cancel" Height="30">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+    </Grid>
+
+</Window>
