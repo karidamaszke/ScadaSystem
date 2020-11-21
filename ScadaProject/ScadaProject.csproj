@@ -58,18 +58,11 @@
     <Compile Include="DeviceListHelp.xaml.cs">
       <DependentUpon>DeviceListHelp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Task.cs" />
     <Compile Include="WriteValueWindow.xaml.cs">
       <DependentUpon>WriteValueWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="DeviceListHelp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Progress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ReadValueWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,12 +77,6 @@
     <Compile Include="ChildControls.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="ControlSystem.cs" />
-    <Compile Include="Progress.xaml.cs">
-      <DependentUpon>Progress.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReadValueWindow.xaml.cs">
-      <DependentUpon>ReadValueWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Scada.cs" />
     <Compile Include="ScadaUi.xaml.cs">
       <DependentUpon>ScadaUi.xaml</DependentUpon>

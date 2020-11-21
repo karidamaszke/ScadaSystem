@@ -93,9 +93,22 @@ namespace ScadaProject
              */
             try
             {
-                int percentValue = (int)Math.Round(value / 255.0 * 100, MidpointRounding.AwayFromZero);
+                short value = (short)this.value;
+                string sign = "";
+                if (value < 0)
+                {
+                    sign = "-";
+                    value *= -1;
+                }
 
-                return percentValue.ToString() + "%";
+                int byteValue = value & 0xFF;
+                int percentValue = (int)Math.Round(byteValue / 255.0 * 100, MidpointRounding.AwayFromZero);
+                if (value < 0)
+                {
+                    percentValue = 100 - percentValue;
+                }
+
+                return sign + percentValue.ToString() + "%";
             }
             catch (Exception ex)
             {

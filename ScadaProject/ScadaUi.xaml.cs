@@ -1,34 +1,68 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ScadaProject
 {
     public partial class ScadaUi : Window
     {
         private Scada scadaSystem = new Scada();
-        private BackgroundWorker workerReadAll = new BackgroundWorker();
-        private Progress progress;
+        private Queue<Task> tasks = new Queue<Task>();
 
-        private bool inProgress = false;
+        private BackgroundWorker worker = new BackgroundWorker();
+        private DispatcherTimer readTimer = new DispatcherTimer();
+        private DispatcherTimer actionTimer = new DispatcherTimer();
 
         public ScadaUi()
         {
             InitializeComponent();
             InitializeBackgroundWorker();
+            InitializeTimers();
 
             ReadSerialPorts();
 
             Closing += ScadaUiClosing;
         }
 
-        private void ScadaUiClosing(object sender, CancelEventArgs e)
+        private void InitializeBackgroundWorker()
         {
-            scadaSystem.CloseSerialPort();
+            worker.DoWork += WorkerDoWork;
+            worker.RunWorkerCompleted += WorkerCompleted;
+            worker.WorkerSupportsCancellation = true;
+        }
+
+        private void InitializeTimers()
+        {
+            readTimer.Tick += new EventHandler(ReadTimerTick);
+            readTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            readTimer.Start();
+
+            actionTimer.Tick += new EventHandler(ActionTimerTick);
+            actionTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            actionTimer.Start();
+        }
+
+        private void ActionTimerTick(object sender, EventArgs e)
+        {
+            if (!scadaSystem.IsInitialized) return;
+
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
+        }
+
+        private void ReadTimerTick(object sender, EventArgs e)
+        {
+            if (tasks.Count > 0) return;
+            if (!scadaSystem.IsInitialized) return;
+
+            tasks.Enqueue(new Task(TaskType.Read, 0));
         }
 
         private void ReadSerialPorts()
@@ -47,12 +81,9 @@ namespace ScadaProject
             }
         }
 
-        private void InitializeBackgroundWorker()
+        private void ScadaUiClosing(object sender, CancelEventArgs e)
         {
-            workerReadAll.DoWork += WorkerReadAllDoWork;
-            workerReadAll.RunWorkerCompleted += WorkerReadAllCompleted;
-            workerReadAll.ProgressChanged += WorkerReadAllProgressChanged;
-            workerReadAll.WorkerReportsProgress = true;
+            scadaSystem.CloseSerialPort();
         }
 
         private void IsEnterPressed(object sender, KeyEventArgs e)
@@ -63,8 +94,6 @@ namespace ScadaProject
 
         private void Connect(object sender, RoutedEventArgs e)
         {
-            if (inProgress) return;
-
             try
             {
                 string portName = portNameBox.Text;
@@ -81,8 +110,6 @@ namespace ScadaProject
 
         private void Disconnect(object sender, RoutedEventArgs e)
         {
-            if (inProgress) return;
-
             try
             {
                 scadaSystem.CloseSerialPort();
@@ -93,57 +120,8 @@ namespace ScadaProject
             }
         }
 
-        private void ReadAllValues(object sender, RoutedEventArgs e)
-        {
-            if (inProgress)
-                return;
-            if (!scadaSystem.IsInitialized)
-            { 
-                NonInitializedError();
-                return;
-            }
-
-            if (!workerReadAll.IsBusy)
-            {
-                workerReadAll.RunWorkerAsync();
-                progress = new Progress();
-                progress.Show();
-                inProgress = true;
-            }
-        }
-
-        private void ReadValue(object sender, RoutedEventArgs e)
-        {
-            if (inProgress)
-                return;
-            if (!scadaSystem.IsInitialized)
-            {
-                NonInitializedError();
-                return;
-            }
-
-            try
-            {
-                ReadValueWindow rvWindow = new ReadValueWindow();
-                rvWindow.ShowDialog();
-
-                int index = rvWindow.GetIndex();
-                if (index != -1)
-                {
-                    scadaSystem.ReadValue(index);
-                    UpdateAllValues();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Cannot read! " + ex.Message);
-            }
-        }
-
         private void WriteValue(object sender, RoutedEventArgs e)
         {
-            if (inProgress)
-                return;
             if (!scadaSystem.IsInitialized)
             {
                 NonInitializedError();
@@ -152,16 +130,16 @@ namespace ScadaProject
 
             try
             {
+                tasks.Clear();
+                if (worker.IsBusy)
+                    worker.CancelAsync();
+
                 WriteValueWindow wvWindow = new WriteValueWindow();
                 wvWindow.ShowDialog();
 
                 int index = wvWindow.GetIndex();
                 if (index != -1)
-                {
-                    scadaSystem.WriteValue(index, wvWindow.GetValue());
-                    UpdateAllValues();
-                }
-
+                    tasks.Enqueue(new Task(TaskType.Write, index, wvWindow.GetValue()));
             }
             catch (Exception ex)
             {
@@ -171,22 +149,24 @@ namespace ScadaProject
 
         private void ShowDeviceList(object sender, RoutedEventArgs e)
         {
-            if (inProgress) return;
-
             DeviceListHelp dlHelp = new DeviceListHelp();
             dlHelp.ShowDialog();
-
         }
 
-        private void WorkerReadAllDoWork(object sender, DoWorkEventArgs e)
+        private void WorkerDoWork(object sender, DoWorkEventArgs e)
         {
+            if (tasks.Count == 0) return;
+
             try
             {
-                int deviceCount = scadaSystem.GetDeviceCount();
-                for (int i = 0; i < deviceCount; i++)
+                Task task = tasks.Dequeue();
+                if (task.type == TaskType.Read)
                 {
-                    scadaSystem.ReadValue(i);
-                    workerReadAll.ReportProgress(i * 100 / deviceCount);
+                    scadaSystem.ReadAllValues();
+                }
+                else if (task.type == TaskType.Write)
+                {
+                    scadaSystem.WriteValue(task.index, task.value);
                 }
             }
             catch (Exception ex)
@@ -195,16 +175,12 @@ namespace ScadaProject
             }
         }
 
-        private void WorkerReadAllProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            progress.progressBar.Value = e.ProgressPercentage;
-        }
-
-        private void WorkerReadAllCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            progress.Close();
-            UpdateAllValues();
-            inProgress = false;
+            lock (this)
+            {
+                UpdateAllValues();
+            }
         }
 
         private void UpdateAllValues()
@@ -238,6 +214,9 @@ namespace ScadaProject
             // if antifreeze thermostat is open - raise an alarm
             if (value == "ON")
             {
+                if (((SolidColorBrush)thermostatBorder.Background).Color == Colors.Red)
+                    return;
+
                 thermostatBorder.Background = new SolidColorBrush(Colors.Red);
                 MessageBox.Show("Error! Antifreeze thermostat is open!");
             }

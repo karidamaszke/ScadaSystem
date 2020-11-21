@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows;
@@ -70,6 +71,81 @@ namespace ScadaProject
             return controlSystem.devices[index].GetValue();
         }
 
+        public void ReadAllValues()
+        {
+            var analogInputs = ReadValuesInRange(0, 9);
+            controlSystem.devices[0].SetValue(analogInputs[0], analogInputs[1]);
+            controlSystem.devices[1].SetValue(analogInputs[4], analogInputs[5]);
+            controlSystem.devices[2].SetValue(analogInputs[16], analogInputs[17]);
+
+            var digitalInputs = ReadValuesInRange(3, 2);
+            controlSystem.devices[3].SetValue(digitalInputs[0], digitalInputs[1]);
+            controlSystem.devices[4].SetValue(digitalInputs[2], digitalInputs[3]);
+            controlSystem.devices[5].SetValue(digitalInputs[2], digitalInputs[3]);
+
+            var analogOutputs = ReadValuesInRange(6, 24);
+            controlSystem.devices[6].SetValue(analogOutputs[0], analogOutputs[1]);
+            controlSystem.devices[7].SetValue(analogOutputs[2], analogOutputs[3]);
+            controlSystem.devices[8].SetValue(analogOutputs[20], analogOutputs[21]);
+            controlSystem.devices[9].SetValue(analogOutputs[22], analogOutputs[23]);
+            controlSystem.devices[10].SetValue(analogOutputs[46], analogOutputs[47]);
+
+            var digitalOutputs = ReadValuesInRange(11, 3);
+            controlSystem.devices[11].SetValue(digitalOutputs[0], digitalOutputs[1]);
+            controlSystem.devices[12].SetValue(digitalOutputs[0], digitalOutputs[1]);
+            controlSystem.devices[13].SetValue(digitalOutputs[2], digitalOutputs[3]);
+            controlSystem.devices[14].SetValue(digitalOutputs[2], digitalOutputs[3]);
+            controlSystem.devices[15].SetValue(digitalOutputs[3], digitalOutputs[4]);
+            controlSystem.devices[16].SetValue(digitalOutputs[3], digitalOutputs[4]);
+        }
+
+        public byte[] ReadValuesInRange(int startIndex, int count)
+        {
+            if (!IsInitialized)
+                throw new Exception("Set transmission parameters first!");
+
+            if (startIndex >= controlSystem.devices.Count)
+                throw new Exception("Unrecognized device!");
+
+            // build and send request
+            byte[] message = new byte[8];
+            BuildMessage(ref message, FunctionCode.READ.GetHashCode(), controlSystem.devices[startIndex].address, count);
+            SendMessage(message);
+
+            // check if there is response
+            int bytesReceived = serialPort.BytesToRead;
+            if (bytesReceived > 0)
+            {
+                // read message
+                byte[] receivedMessage = new byte[bytesReceived];
+                for (int i = 0; i < bytesReceived; i++)
+                    receivedMessage[i] = (byte)serialPort.ReadByte();
+
+                if (message[0] != receivedMessage[0])
+                    throw new Exception("Received message from unexpected controller address!");
+
+                if (receivedMessage[1] == FunctionCode.READ.GetHashCode())
+                {
+                    uint checksum = CalculateChecksum(receivedMessage, receivedMessage.Length - 2);
+                    if (receivedMessage[bytesReceived - 1] != (checksum >> 8) || receivedMessage[bytesReceived - 2] != (checksum & 0xFF))
+                        throw new Exception("Received wrong checksum!");
+
+                    int bytesToRead = receivedMessage[2];
+
+                    return receivedMessage.Skip(3).Take(bytesToRead).ToArray();
+                }
+                else
+                {
+                    HandleError(receivedMessage[2]);
+                    return new byte[0];
+                }
+            }
+            else
+            {
+                throw new Exception("Empty response! Make sure you provided proper controller address.");
+            }
+        }
+
         public void ReadValue(int index)
         {
             if (!IsInitialized)
@@ -127,7 +203,6 @@ namespace ScadaProject
             if (index >= controlSystem.devices.Count)
                 throw new Exception("Unrecognized device!");
 
-            // analog output value should be cast from percentage value
             int castedValue;
             if (controlSystem.devices[index].GetType() == typeof(AnalogOutput))
             {

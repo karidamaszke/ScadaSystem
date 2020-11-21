@@ -57,7 +57,7 @@
 
             <GridSplitter HorizontalAlignment="Center" Height="5" Margin="0,300,0,0" VerticalAlignment="Top" Width="220"/>
 
-            <Button Content="READ ALL VALUES" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="10,330,10,0" VerticalAlignment="Top" Width="150" Height="35" Click="ReadAllValues">
+            <Button Content="WRITE VALUE" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="20,342,20,0" VerticalAlignment="Top" Width="150" Height="35" Click="WriteValue">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
@@ -65,23 +65,7 @@
                 </Button.Resources>
             </Button>
 
-            <Button Content="READ VALUE" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="10,390,10,0" VerticalAlignment="Top" Width="150" Height="35" Click="ReadValue">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <Button Content="WRITE VALUE" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="10,450,10,0" VerticalAlignment="Top" Width="150" Height="35" Click="WriteValue">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <Button Content="SHOW DEVICE LIST" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="10,510,10,0" VerticalAlignment="Top" Width="150" Height="35" Click="ShowDeviceList">
+            <Button Content="SHOW DEVICE LIST" FontWeight="Bold" Background="AliceBlue" HorizontalAlignment="Center" Margin="20,434,20,0" VerticalAlignment="Top" Width="150" Height="35" Click="ShowDeviceList">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
