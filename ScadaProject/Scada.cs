@@ -74,16 +74,25 @@ namespace ScadaProject
         public void ReadAllValues()
         {
             var analogInputs = ReadValuesInRange(0, 9);
+            if (analogInputs.Length < 18)
+                throw new Exception("Analog inputs - not enough bytes were read!");
+
             controlSystem.devices[0].SetValue(analogInputs[0], analogInputs[1]);
             controlSystem.devices[1].SetValue(analogInputs[4], analogInputs[5]);
             controlSystem.devices[2].SetValue(analogInputs[16], analogInputs[17]);
 
             var digitalInputs = ReadValuesInRange(3, 2);
+            if (analogInputs.Length < 4)
+                throw new Exception("Digital inputs - not enough bytes were read!");
+
             controlSystem.devices[3].SetValue(digitalInputs[0], digitalInputs[1]);
             controlSystem.devices[4].SetValue(digitalInputs[2], digitalInputs[3]);
             controlSystem.devices[5].SetValue(digitalInputs[2], digitalInputs[3]);
 
             var analogOutputs = ReadValuesInRange(6, 24);
+            if (analogOutputs.Length < 48)
+                throw new Exception("Analog outputs - not enough bytes were read!");
+
             controlSystem.devices[6].SetValue(analogOutputs[0], analogOutputs[1]);
             controlSystem.devices[7].SetValue(analogOutputs[2], analogOutputs[3]);
             controlSystem.devices[8].SetValue(analogOutputs[20], analogOutputs[21]);
@@ -91,6 +100,9 @@ namespace ScadaProject
             controlSystem.devices[10].SetValue(analogOutputs[46], analogOutputs[47]);
 
             var digitalOutputs = ReadValuesInRange(11, 3);
+            if (digitalOutputs.Length < 6)
+                throw new Exception("Digital outputs - not enough bytes were read!");
+
             controlSystem.devices[11].SetValue(digitalOutputs[0], digitalOutputs[1]);
             controlSystem.devices[12].SetValue(digitalOutputs[0], digitalOutputs[1]);
             controlSystem.devices[13].SetValue(digitalOutputs[2], digitalOutputs[3]);
